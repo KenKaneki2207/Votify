@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        
+    </style>
+</head>
+
+<body style="font-family: Arial, Helvetica, sans-serif;">
+
+    <!-- NAVBAR -->
+    {% include "navigation.html" %}
+
+    <!-- SERVER MESSAGES -->
+    {% if message %}
+    <div class="toast show m-auto mt-4 z-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="{% static 'home_page_image.jpg' %}" class="rounded me-2" alt="..." style="width: 35px; height: 35px;">
+            <strong class="me-auto text-info">Voting</strong>
+            
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" onclick="blur"></button>
+        </div>
+        <div class="toast-body fs-6">
+            {{message}}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- VOTING -->
+    {% for candidates_list in candidates_lists %}
+    <div class="container mt-5" style="max-width: 950px;">
+        
+        
+        <div class="text-center">
+            <h1 class="">{{candidates_list.election.election}}</h1>
+            <p>{{candidates_list.election.description}}</p>
+        </div>
+        <table class="table table-borderless fs-5">
+            <tr>
+                <th>
+                    <h2>Participants</h2>
+                </th>
+                <th>
+                    <h1></h1>
+                </th>
+            </tr>
+            
+            <!-- Candidate list -->
+            {% for candidate in candidates_list.candidates %}
+            <form action={% url 'send_vote' candidate_name=candidate.name %} method="POST">
+            {% csrf_token %}
+            <tr>
+                <td class="m-auto">{{candidate.name}}</td>
+                <td class="m-auto"><button class="btn btn-outline-info">VOTE</button></td>
+            </tr>
+            </form> 
+            {% endfor %}
+        
+        </table>
+    </div>
+    {% endfor %}
+
+    <!-- Footer -->
+    {% include "footer.html" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
